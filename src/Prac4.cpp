@@ -46,7 +46,8 @@ int setup_gpio(void){
     //Set up wiring Pi
     wiringPiSetup();
     //setting up the buttons
-
+    pinMode (13, INPUT);
+    pinMode (15,INPUT);
     //setting upt the SPI interface
     
     return 0;
@@ -104,7 +105,24 @@ int main(){
      * Don't forget to check if you have pause set or not when writing to the buffer
      * 
      */
-     
+    FILE *filePointer;
+    char ch;
+
+    filePointer = fopen("sound_16k_8bit.raw", "r");
+
+    int counter = 0;
+    while ((ch = fgetc(filePointer)) != EOF && playing)
+    {
+      buffer[1][bufferlocation][0]=ch;
+
+
+          counter++;
+    }
+
+
+    fclose(filePointer);
+
+	
     // Open the file
      
     // Have a loop to read from the file
