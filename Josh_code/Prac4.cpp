@@ -17,8 +17,19 @@
  */
 
 #include "Prac4.h"
+#include <pthread.h>
+#include <sched.h>
+
 
 using namespace std;
+
+//priority stuff
+pthread_attr_t tattr;
+pthread_t tid;
+int ret;
+int newprio = 99;
+sched_param param;
+
 
 int chan = 0;
 bool playing = true; // should be set false when paused
@@ -27,6 +38,8 @@ unsigned char buffer[2][BUFFER_SIZE][2];
 int buffer_location = 0;
 bool bufferReading = 0; //using this to switch between column 0 and 1 - the first column
 bool threadReady = false; //using this to finish writing the first column at the start of the song, before the column is played
+
+
 
 
 // Configure your interrupts here.
@@ -109,15 +122,17 @@ void *playThread(void *threadargs){
 		continue;
 	}
         //Write the buffer out to SPI
-        for(i=0;i<100,;i++){
-	writeCommand = buffer(buffer_location);
-	writeCommand = writeCommand << 4;
-	writeCommand = writeCommand | 0b0111;
-	wiringPiSPIDataRW(ce, writeCommand, 1);
-
+        for(buffer_location;buffer_location<1000,;i++){
+		
+		writeCommand = buffer(threadargs^1)(buffer_location);
+		wiringPiSPIDataRW(ce, writeCommand, 1);
 	}
         //Do some maths to check if you need to toggle buffers
-        
+        if(buffer_location == 999){
+        	buffer_location = 0;
+		bufferReading = bufferReading^1;
+        }
+
 	
     }
     
@@ -136,7 +151,26 @@ int main(){
      */ 
     
     //Write your logic here
-    
+    // more priority stuff
+    // this should work 
+    //maybe 
+    /* initialized with default attributes */
+    ret = pthread_attr_init (&tattr);
+
+    /* safe to get existing scheduling param */
+    ret = pthread_attr_getschedparam (&tattr, &param);
+
+    /* set the priority; others are unchanged */
+    param.sched_priority = newprio;
+
+    /* setting the new scheduling param */
+    ret = pthread_attr_setschedparam (&tattr, &param);
+
+    /* with new priority specified */
+    ret = pthread_create (&tid, &tattr,playThread,threadargs ); 
+
+
+
     /*
      * Read from the file, character by character
      * You need to perform two operations for each character read from the file
