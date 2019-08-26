@@ -38,10 +38,23 @@ long lastInterruptTime = 0;
 
 void play_pause_isr(void){
     //Write your logis here
+   long interruptTime = millis();
+   if(playing == true){
+	Playing = false;
+   }else{
+   	playing = true;
+   }
+   lastInterruptTime = interruptTime;
 }
 
 void stop_isr(void){
     // Write your logic here
+ long interruptTime = millis();
+       exit(0); 
+        
+   lastInterruptTime = interruptTime;
+}
+
 }
 
 /*
@@ -92,11 +105,20 @@ void *playThread(void *threadargs){
     //You need to only be playing if the stopped flag is false
     while(!stopped){
         //Code to suspend playing if paused
-        
+        if(playing == false){
+		continue;
+	}
         //Write the buffer out to SPI
-        
+        for(i=0;i<100,;i++){
+	writeCommand = buffer(buffer_location);
+	writeCommand = writeCommand << 4;
+	writeCommand = writeCommand | 0b0111;
+	wiringPiSPIDataRW(ce, writeCommand, 1);
+
+	}
         //Do some maths to check if you need to toggle buffers
         
+	
     }
     
     pthread_exit(NULL);
