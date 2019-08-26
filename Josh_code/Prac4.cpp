@@ -30,8 +30,8 @@ bool threadReady = false; //using this to finish writing the first column at the
 
 
 // Configure your interrupts here.
-wiringPiISR(PLAY_B,INT_EDGE_RISING,&play_pause_isr);
-wiringPiISR(3,INT_EDGE_RISING,&stop_isr);
+wiringPiISR(PLAY_BUTTON,INT_EDGE_RISING,&play_pause_isr);
+wiringPiISR(STOP_BUTTON,INT_EDGE_RISING,&stop_isr);
 
 // Don't forget to use debouncing.
 long lastInterruptTime = 0;
@@ -51,10 +51,10 @@ int setup_gpio(void){
     //Set up wiring Pi
     wiringPiSetup();
     //setting up the buttons
-    pinMode (2, INPUT);
-    pinMode (3,INPUT);
-    pullUpDnControl(2,PUD_DOWN);
-    pullUpDnControl(3,PUD_DOWN);
+    pinMode (PLAY_BUTTON, INPUT);
+    pinMode (STOP_BUTTON,INPUT);
+    pullUpDnControl(PLAY_BUTTON,PUD_DOWN);
+    pullUpDnControl(STOP_BUTTON,PUD_DOWN);
 
     //setting upt the SPI interface
     wiringPiSPISetup(12,25 600 );
