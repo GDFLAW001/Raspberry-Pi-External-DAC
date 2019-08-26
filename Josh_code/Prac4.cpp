@@ -57,8 +57,23 @@ int setup_gpio(void){
     pullUpDnControl(STOP_BUTTON,PUD_DOWN);
 
     //setting upt the SPI interface
-    wiringPiSPISetup(12,25 600 );
-    return 0;
+    wiringPiSPISetup(0,25 600 );
+    
+    {
+   	 fprintf (stderr, "Unable to open SPI device 0: %s\n", strerror (errno)) ;
+  	 exit (1) ;
+    }
+	
+  // We want to use the first SPI channel
+  int ce = 0;
+  uint16_t writeCommand;
+
+  // Enable writing
+  writeCommand = 0b0111;
+  wiringPiSPIDataRW (ce, writeCommand, 1);
+
+
+	return 0;
 }
 
 /* 
