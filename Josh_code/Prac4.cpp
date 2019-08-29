@@ -26,7 +26,6 @@ using namespace std;
 //priority stuff
 pthread_attr_t tattr;
 pthread_t tid;
-int ret;
 int newprio = 99;
 sched_param param;
 
@@ -154,20 +153,17 @@ int main(){
     // more priority stuff
     // this should work 
     //maybe 
-    /* initialized with default attributes */
-    ret = pthread_attr_init (&tattr);
 
-    /* safe to get existing scheduling param */
-    ret = pthread_attr_getschedparam (&tattr, &param);
-
-    /* set the priority; others are unchanged */
+    pthread_attr_t tattr;
+    pthread_t thread_id;
+    int newprio = 99;
+    sched_param param;
+    
+    pthread_attr_init (&tattr);
+    pthread_attr_getschedparam (&tattr, &param);
     param.sched_priority = newprio;
-
-    /* setting the new scheduling param */
-    ret = pthread_attr_setschedparam (&tattr, &param);
-
-    /* with new priority specified */
-    ret = pthread_create (&tid, &tattr,playThread,threadargs ); 
+    pthread_attr_setschedparam (&tattr, &param);
+    pthread_create (&thread_id, &tattr,playThread,(void *)1 ); 
 
 
 
