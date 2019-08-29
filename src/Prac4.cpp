@@ -79,6 +79,15 @@ void *playThread(void *threadargs){
     pthread_exit(NULL);
 }
 
+void chartobin(char ch)
+{
+    for (int i = 7; i >= 0; --i)
+    {
+        putchar((c & (1 << i)) ? '1' : '0' );
+    }
+    putchar('\n');
+}
+
 int main(){
     // Call the setup GPIO function
 	if(setup_gpio()==-1){
@@ -113,10 +122,23 @@ int main(){
     int counter = 0;
     while ((ch = fgetc(filePointer)) != EOF && playing)
     {
-      buffer[1][bufferlocation][0]=ch;
+      int bits0 = 0b00000000;
+      int bits1 = 0b00000000;
 
+      bits0 = ch << 4;
+      bits0 = bits0 | 0b0111000
 
-          counter++;
+      bits1 = ch << 4;
+
+      char c0 = strtol((char)bits0, 0, 2);
+      char c1 = strtol((char)bits1, 0, 2);
+      
+      buffer[BufferReading][counter][0] = c0;
+      buffer[BufferReading][counter][1] = c1;
+      
+      counter++;
+
+      
     }
 
 
