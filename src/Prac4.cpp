@@ -46,8 +46,8 @@ int setup_gpio(void){
     //Set up wiring Pi
     wiringPiSetup();
     //setting up the buttons
-    pinMode (13, INPUT);
-    pinMode (15,INPUT);
+    pinMode (PLAY_BUTTON, INPUT);
+    pinMode (STOP_BUTTON,INPUT);
     //setting upt the SPI interface
     
     return 0;
